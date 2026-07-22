@@ -8,6 +8,5 @@ export const screenshotPaths = [
   "/images/screenshots/screenshot-6.jpeg",
   "/images/screenshots/screenshot-7.jpeg",
   "/images/screenshots/screenshot-8.jpeg",
-  "/images/screenshots/screenshot-9.jpeg",
-  "/images/screenshots/screenshot-10.jpeg"
+  "/images/screenshots/screenshot-9.jpeg"
 ] as const;
