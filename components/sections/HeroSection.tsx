@@ -116,7 +116,7 @@ export function HeroSection() {
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div className="text-left">
-                  <p className="text-xl font-bold leading-tight text-[#2d1b1e]">500+</p>
+                  <p className="text-xl font-bold leading-tight text-[#2d1b1e]">50+</p>
                   <p className="text-[11px] font-semibold uppercase tracking-wider text-primary/70">NGOs</p>
                 </div>
               </div>
