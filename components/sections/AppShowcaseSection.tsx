@@ -9,7 +9,7 @@ export function AppShowcaseSection() {
       <FadeIn>
         <SectionHeader
           eyebrow="App Showcase"
-          title="See Charitey in action"
+          title="See Fourth Idly in action"
           description="A beautifully crafted experience designed to make giving feel effortless — browse, connect, and impact from anywhere."
         />
       </FadeIn>

@@ -37,7 +37,7 @@ export function Navbar() {
         className={cn(
           "transition-all duration-500 ease-out",
           scrolled
-            ? "border-b border-primary/10 bg-secondary/75 shadow-[0_8px_32px_-8px_rgba(124,62,70,0.12)] backdrop-blur-xl backdrop-saturate-150"
+            ? "border-b border-primary/10 bg-secondary/80 shadow-[0_8px_32px_-8px_rgba(124,62,70,0.12)] backdrop-blur-xl backdrop-saturate-150"
             : "border-b border-transparent bg-transparent"
         )}
         initial={false}
@@ -84,13 +84,17 @@ export function Navbar() {
 
           <button
             type="button"
-            className="inline-flex shrink-0 items-center justify-center rounded-xl p-2.5 text-primary transition-all duration-300 hover:bg-primary-muted hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:hidden"
+            className="inline-flex shrink-0 items-center justify-center rounded-xl p-2.5 text-primary transition-all duration-300 hover:scale-105 hover:bg-primary-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:hidden"
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             onClick={() => setMobileOpen((open) => !open)}
           >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
         </div>
       </motion.div>

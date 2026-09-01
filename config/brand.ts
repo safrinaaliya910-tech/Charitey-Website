@@ -1,8 +1,9 @@
 export const brand = {
-  name: "Charitey",
-  tagline: "It's We Donated.",
+  name: "Fourth Idly",
+  tagline:
+    "Three idlies satisfies your hunger, but the fourth idly is for others.",
   description:
-    "Charitey is the mobile app that makes charitable giving simple, transparent, and rewarding. Discover trusted causes, track your impact, and give with confidence.",
+    "Fourth Idly connects verified NGOs with generous donors across India. Share what you can — food, support, or time — and see real impact reach the people who need it most.",
   colors: {
     primary: "#7C3E46",
     primaryDark: "#5E2F35",

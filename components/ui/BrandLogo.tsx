@@ -68,7 +68,7 @@ export function BrandLogo({
             textClassName ?? "text-primary group-hover:text-primary-dark"
           )}
         >
-          CHARITEY
+          {brand.name}
         </span>
       )}
     </Link>

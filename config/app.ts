@@ -2,9 +2,9 @@
 export const PLAY_STORE_URL = "#";
 
 export const contact = {
-  email: "charitey12@gmail.com",
-  subject: "Support Request from Charitey Website",
-  body: "Hi Charitey,\n\nI would like to enquire about...\n\nThanks.",
+  email: "charitey12@gmail.com", // change later if you have a Fourth Idly email
+  subject: "Support Request from Fourth Idly Website",
+  body: "Hi Fourth Idly team,\n\nI would like to enquire about...\n\nThanks.",
 } as const;
 
 /** Pre-filled mailto — widely supported across desktop and mobile clients */

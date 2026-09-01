@@ -36,13 +36,13 @@ export function DownloadSection() {
 
         <FadeIn>
           <p className="mb-3 text-sm font-medium uppercase tracking-widest text-white/80">
-            Download {brand.name}
+            Download Fourth Idly
           </p>
           <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight md:text-4xl lg:text-5xl">
             Start giving with purpose today
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/85 md:text-lg">
-            Join thousands of changemakers using Charitey to connect with verified
+            Join thousands of changemakers using Fourth Idly to connect with verified
             NGOs and make a real difference in communities across India.
           </p>
 
@@ -59,7 +59,7 @@ export function DownloadSection() {
           </div>
 
           <p className="mt-6 text-sm text-white/60">
-            Available on Google Play soon.
+            Available on Google Play Store.
           </p>
         </FadeIn>
       </div>

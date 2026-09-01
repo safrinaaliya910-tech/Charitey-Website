@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { brand } from "./brand";
 
 export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://charitey.com";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.fourthidly.com";
 
 export const seo = {
   title: {
@@ -11,16 +11,16 @@ export const seo = {
   },
   description: brand.description,
   keywords: [
-    "Charitey",
+    "Fourth Idly",
+    "fourth idly",
     "charity app",
     "donation app",
+    "food donation",
+    "NGO app India",
     "mobile giving",
     "nonprofit",
-    "philanthropy",
-    "track donations",
     "transparent giving",
-    "charitable giving",
-    "donate",
+    "donate food",
   ],
   creator: brand.name,
   publisher: brand.name,
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "en_IN",
     url: siteUrl,
     siteName: brand.name,
     title: seo.title.default,
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     title: seo.title.default,
     description: seo.description,
     images: ["/images/logo/normal-logo.png"],
-    creator: `@${brand.name.toLowerCase()}`,
+    creator: "@fourthidly",
   },
   robots: {
     index: true,
