@@ -1,7 +1,7 @@
 import { createLegalMetadata, LegalDocumentPage } from "@/lib/legal";
 
-export const metadata = createLegalMetadata("acceptable-use-policy");
+export const metadata = createLegalMetadata("data-collection-permission-policy");
 
-export default function AcceptableUsePolicyPage() {
-  return <LegalDocumentPage slug="acceptable-use-policy" />;
+export default function DataCollectionPermissionPolicyPage() {
+  return <LegalDocumentPage slug="data-collection-permission-policy" />;
 }

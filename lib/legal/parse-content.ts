@@ -3,111 +3,120 @@ export type ContentBlock =
   | { type: "paragraph"; text: string }
   | { type: "list"; ordered: boolean; items: string[] };
 
-function headingLevel(line: string): 2 | 3 | null {
-  const match = line.match(/^(\d+(?:\.\d+)*)\s+/);
-  if (!match) return null;
+/** Pull "Effective Date: … | Last Updated: …" from the first paragraph(s). */
+export function extractMetaLine(paragraphs: string[]): string | null {
+  for (const p of paragraphs) {
+    const line = p.trim();
+    if (/effective\s*date/i.test(line) || /last\s*updated/i.test(line)) {
+      // Prefer a clean single-line meta; drop long draft notes if present.
+      const match = line.match(
+        /Effective Date:\s*[^|\n]+(?:\s*\|\s*Last Updated:\s*[^\n]+)?/i
+      );
+      return match ? match[0].trim() : line.split("\n")[0].trim();
+    }
+  }
+  return null;
+}
 
-  const parts = match[1].split(".");
-  if (parts.length >= 3) return 3;
-  if (parts.length === 2) return 2;
-  if (parts.length === 1 && line.length < 80 && !line.endsWith(".")) return 2;
+function isHeading(line: string): { level: 2 | 3; text: string } | null {
+  const h2 = line.match(/^##\s+(.+)$/);
+  if (h2) return { level: 2, text: h2[1].trim() };
+
+  const h3 = line.match(/^###\s+(.+)$/);
+  if (h3) return { level: 3, text: h3[1].trim() };
+
+  // Fallback: "1.2 Definitions" / "10.2 User Roles..." style section titles
+  // (only when the whole line looks like a short numbered heading)
+  if (/^\d+(\.\d+)*(\.\d+)*\s+[A-Z].{0,80}$/.test(line) && line.length < 100) {
+    return { level: 2, text: line };
+  }
 
   return null;
 }
 
-function isMetaLine(line: string) {
-  return /Effective Date:/i.test(line) || /Last Updated:/i.test(line);
+function isBullet(line: string): string | null {
+  // • item  |  - item  |  * item
+  const m = line.match(/^[•\-\*]\s+(.+)$/);
+  return m ? m[1].trim() : null;
 }
 
-function isListIntro(line: string) {
-  return /[:：]\s*$/.test(line.trim());
+function isOrderedItem(line: string): string | null {
+  const m = line.match(/^\d+[\.\)]\s+(.+)$/);
+  return m ? m[1].trim() : null;
 }
 
-function looksLikeListItem(line: string) {
-  const trimmed = line.trim();
-  return (
-    trimmed.length > 0 &&
-    trimmed.length <= 220 &&
-    /^[A-Z'"(]/.test(trimmed) &&
-    (trimmed.endsWith(".") || trimmed.endsWith(";"))
-  );
-}
-
-function flattenParagraphs(paragraphs: string[]) {
-  return paragraphs
-    .flatMap((paragraph) => paragraph.split("\n"))
-    .map((line) => line.trim())
-    .filter(Boolean);
-}
-
+/**
+ * Turns the flat `paragraphs: string[]` array into structured blocks
+ * (headings, paragraphs, grouped lists) for clean rendering.
+ */
 export function parseLegalContent(
   paragraphs: string[],
-  documentTitle?: string
+  _documentTitle?: string
 ): ContentBlock[] {
-  const lines = flattenParagraphs(paragraphs).filter((line) => !isMetaLine(line));
   const blocks: ContentBlock[] = [];
-  let index = 0;
+  let currentList: { ordered: boolean; items: string[] } | null = null;
 
-  while (index < lines.length) {
-    const line = lines[index];
-    const level = headingLevel(line);
+  const flushList = () => {
+    if (currentList && currentList.items.length > 0) {
+      blocks.push({
+        type: "list",
+        ordered: currentList.ordered,
+        items: currentList.items,
+      });
+    }
+    currentList = null;
+  };
 
-    if (level) {
-      const normalized = line.replace(/^\d+(?:\.\d+)*\s+/, "").trim();
+  for (const raw of paragraphs) {
+    // One array entry may contain multiple lines (legacy single-string docs)
+    const lines = raw.split(/\n/).map((l) => l.trim()).filter(Boolean);
+
+    for (const line of lines) {
+      // Skip pure meta lines — they are shown in the page header
       if (
-        documentTitle &&
-        normalized.toLowerCase() === documentTitle.toLowerCase()
+        (/effective\s*date/i.test(line) || /last\s*updated/i.test(line)) &&
+        line.length < 120
       ) {
-        index += 1;
+        continue;
+      }
+      // Skip the short draft note if it sits alone
+      if (/^internal working draft/i.test(line) || /^full-length version/i.test(line)) {
         continue;
       }
 
-      blocks.push({ type: "heading", level, text: line });
-      index += 1;
-      continue;
-    }
-
-    if (isListIntro(line)) {
-      const intro = line;
-      const items: string[] = [];
-      let cursor = index + 1;
-
-      while (cursor < lines.length) {
-        const candidate = lines[cursor];
-        if (headingLevel(candidate) || isListIntro(candidate)) break;
-        if (!looksLikeListItem(candidate)) break;
-        items.push(candidate);
-        cursor += 1;
-      }
-
-      if (items.length >= 2) {
-        blocks.push({ type: "paragraph", text: intro });
-        blocks.push({ type: "list", ordered: false, items });
-        index = cursor;
+      const heading = isHeading(line);
+      if (heading) {
+        flushList();
+        blocks.push({ type: "heading", level: heading.level, text: heading.text });
         continue;
       }
-    }
 
-    const grouped: string[] = [line];
-    let cursor = index + 1;
-
-    while (cursor < lines.length) {
-      const next = lines[cursor];
-      if (headingLevel(next) || isListIntro(next) || looksLikeListItem(next)) {
-        break;
+      const bullet = isBullet(line);
+      if (bullet !== null) {
+        if (!currentList || currentList.ordered) {
+          flushList();
+          currentList = { ordered: false, items: [] };
+        }
+        currentList.items.push(bullet);
+        continue;
       }
-      grouped.push(next);
-      cursor += 1;
-    }
 
-    blocks.push({ type: "paragraph", text: grouped.join(" ") });
-    index = cursor;
+      const ordered = isOrderedItem(line);
+      if (ordered !== null) {
+        if (!currentList || !currentList.ordered) {
+          flushList();
+          currentList = { ordered: true, items: [] };
+        }
+        currentList.items.push(ordered);
+        continue;
+      }
+
+      // Normal paragraph
+      flushList();
+      blocks.push({ type: "paragraph", text: line });
+    }
   }
 
+  flushList();
   return blocks;
-}
-
-export function extractMetaLine(paragraphs: string[]) {
-  const flat = flattenParagraphs(paragraphs);
-  return flat.find(isMetaLine);
 }

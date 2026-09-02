@@ -3,7 +3,11 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { brand } from "@/config/brand";
 import documents from "./documents.json";
-import { extractMetaLine, parseLegalContent, ContentBlock } from "./parse-content";
+import {
+  extractMetaLine,
+  parseLegalContent,
+  type ContentBlock,
+} from "./parse-content";
 
 export type LegalSlug = keyof typeof documents;
 
@@ -36,19 +40,13 @@ type LegalDocumentPageProps = {
   slug: LegalSlug;
 };
 
-// --- Perf fix: cache parsed blocks per-slug -------------------------------
-// parseLegalContent() walks every line of a document and does regex/grouping
-// work to build headings/paragraphs/lists. For short documents (Disclaimer,
-// Cookie Policy, Accessibility, etc.) this is cheap and invisible. For the
-// three large documents (Privacy Policy, Terms & Conditions, Community
-// Guidelines) it is expensive enough that re-running it on every render -
-// and then having React diff a brand-new, unrelated content tree against the
-// previous page's tree - produces a visible flash/blink when navigating.
-// Caching by slug means the parse only ever runs once per document, no
-// matter how many times the component re-renders or how the user navigates.
+// Cache parsed blocks per slug so large docs are only parsed once
 const parsedBlocksCache = new Map<string, ContentBlock[]>();
 
-function getParsedBlocks(slug: LegalSlug, document: LegalDocument): ContentBlock[] {
+function getParsedBlocks(
+  slug: LegalSlug,
+  document: LegalDocument
+): ContentBlock[] {
   const cached = parsedBlocksCache.get(slug);
   if (cached) return cached;
 
@@ -56,7 +54,6 @@ function getParsedBlocks(slug: LegalSlug, document: LegalDocument): ContentBlock
   parsedBlocksCache.set(slug, blocks);
   return blocks;
 }
-// ---------------------------------------------------------------------------
 
 function LegalBreadcrumb({ title }: { title: string }) {
   return (
@@ -89,6 +86,21 @@ function LegalBreadcrumb({ title }: { title: string }) {
   );
 }
 
+function linkifyText(text: string) {
+  const parts = text.split(/(\S+@\S+\.\S+)/g);
+
+  return parts.map((part, index) => {
+    if (/^\S+@\S+\.\S+$/.test(part)) {
+      return (
+        <a key={`${part}-${index}`} href={`mailto:${part}`}>
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+}
+
 function LegalContent({ slug }: { slug: LegalSlug }) {
   const document = legalDocuments[slug];
   if (!document) return null;
@@ -106,7 +118,6 @@ function LegalContent({ slug }: { slug: LegalSlug }) {
               </h2>
             );
           }
-
           return (
             <h3 key={`${slug}-h3-${index}`} id={`section-${index}`}>
               {block.text}
@@ -127,26 +138,12 @@ function LegalContent({ slug }: { slug: LegalSlug }) {
           );
         }
 
-        return <p key={`${slug}-p-${index}`}>{linkifyText(block.text)}</p>;
+        return (
+          <p key={`${slug}-p-${index}`}>{linkifyText(block.text)}</p>
+        );
       })}
     </div>
   );
-}
-
-function linkifyText(text: string) {
-  const parts = text.split(/(\S+@\S+\.\S+)/g);
-
-  return parts.map((part, index) => {
-    if (/^\S+@\S+\.\S+$/.test(part)) {
-      return (
-        <a key={`${part}-${index}`} href={`mailto:${part}`}>
-          {part}
-        </a>
-      );
-    }
-
-    return part;
-  });
 }
 
 export function LegalDocumentPage({ slug }: LegalDocumentPageProps) {
@@ -156,31 +153,31 @@ export function LegalDocumentPage({ slug }: LegalDocumentPageProps) {
   const metaLine = extractMetaLine(document.paragraphs);
 
   return (
-    // key={slug} forces React to fully remount this tree when the slug
-    // changes instead of diffing two unrelated (and, for these 3 documents,
-    // very large) content trees against each other. That diffing is what
-    // caused the visible blink on Privacy Policy / Terms & Conditions /
-    // Community Guidelines specifically - they're the only documents big
-    // enough for the diff cost to be visible.
-    <main key={slug} className="min-h-screen w-full bg-gradient-subtle">
-      <div className="mx-auto w-full max-w-[850px] px-6 py-16 md:px-8 md:py-24">
-        <LegalBreadcrumb title={document.title} />
+    <main key={slug} className="min-h-screen w-full bg-background">
+      {/* Full-width header band */}
+      <div className="border-b border-border/60 bg-secondary/40">
+        <div className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 md:px-10 md:py-14">
+          <LegalBreadcrumb title={document.title} />
 
-        <header className="mb-12 border-b border-border/70 pb-10">
-          <p className="mb-3 text-sm font-medium uppercase tracking-widest text-primary">
-            Legal Documentation
-          </p>
-          <h1 className="text-3xl font-semibold tracking-tight text-foreground md:text-4xl lg:text-[2.75rem] lg:leading-tight">
-            {document.title}
-          </h1>
-          {metaLine && (
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              {metaLine}
+          <header>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+              Legal Documentation
             </p>
-          )}
-        </header>
+            <h1 className="max-w-4xl text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-[2.6rem] md:leading-[1.15]">
+              {document.title}
+            </h1>
+            {metaLine && (
+              <p className="mt-3 text-sm text-muted-foreground md:text-[15px]">
+                {metaLine}
+              </p>
+            )}
+          </header>
+        </div>
+      </div>
 
-        <article className="rounded-2xl border border-border/60 bg-secondary/80 px-6 py-8 shadow-soft md:px-10 md:py-10">
+      {/* Full-width content area */}
+      <div className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 md:px-10 md:py-14">
+        <article className="rounded-2xl border border-border/50 bg-card px-5 py-8 shadow-sm sm:px-8 md:px-12 md:py-12">
           <LegalContent slug={slug} />
         </article>
       </div>
