@@ -186,21 +186,21 @@ export function HeroSection() {
         </div>
 
         {/* Phone column */}
-        <FadeIn
-          delay={0.2}
-          direction="left"
-          className="relative mx-auto flex w-full max-w-[240px] justify-center sm:max-w-[260px] lg:mx-0 lg:max-w-[290px] lg:justify-end xl:ml-auto xl:max-w-[320px]"
-        >
-          <div className="relative flex w-full justify-center">
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center"
-            >
-              <div className="h-[80%] w-[80%] rounded-full bg-gradient-to-br from-[#d9a5ac]/30 via-primary/15 to-transparent blur-3xl" />
-            </div>
-            <PhoneMockup />
-          </div>
-        </FadeIn>
+<FadeIn
+  delay={0.2}
+  direction="left"
+  className="relative mx-auto flex w-full max-w-[240px] justify-center sm:max-w-[260px] lg:mx-0 lg:max-w-[290px] lg:justify-end xl:ml-auto xl:max-w-[320px]"
+>
+  <div className="relative flex w-full justify-center lg:mt-16">
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center"
+    >
+      <div className="h-[100%] w-[80%] rounded-full bg-gradient-to-br from-[#d9a5ac]/30 via-primary/15 to-transparent blur-3xl" />
+    </div>
+    <PhoneMockup />
+  </div>
+</FadeIn>
       </div>
 
       <motion.a

@@ -8,6 +8,7 @@ export function PhoneMockup() {
       variant="phone"
       floating
       showArrows
+      showDots={false}
       autoPlayInterval={4000}
     />
   );

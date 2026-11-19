@@ -17,8 +17,13 @@ type ScreenshotCarouselProps = {
   floating?: boolean;
 };
 
+/**
+ * Hero phone: width is limited by screen height on large screens so the whole
+ * phone fits in the first screen. (12rem = navbar + spacing, 0.45 = 9/20 ratio)
+ */
 const PHONE_WIDTH = {
-  phone: "w-[260px] sm:w-[280px] lg:w-[300px]",
+  phone:
+    "w-[210px] sm:w-[230px] lg:w-[min(250px,calc((100svh_-_11rem)*0.45))]",
   showcase: "w-[240px] sm:w-[260px]",
 } as const;
 
@@ -69,33 +74,29 @@ export function ScreenshotCarousel({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [previewOpen, goNext, goPrev]);
 
+  /* Screen: screenshot fills the whole display (no padding, no fake notch) */
   const screenInner = (
-    <div className="relative aspect-[9/19.5] w-full overflow-hidden rounded-[2rem] bg-[#f8f4f5]">
-      <div className="absolute inset-0 flex items-center justify-center p-2 sm:p-2.5">
-        {screenshots.map((src, index) => (
-          <motion.div
-            key={src}
-            className="absolute inset-2 flex items-center justify-center sm:inset-2.5"
-            initial={false}
-            animate={{
-              opacity: index === current ? 1 : 0,
-              scale: index === current ? 1 : 0.985,
-            }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            aria-hidden={index !== current}
-          >
-            <Image
-              src={src}
-              alt={`Charitey app screenshot ${index + 1}`}
-              fill
-              className="object-contain object-center"
-              sizes="(max-width: 768px) 260px, 300px"
-              priority={index === 0}
-              loading={index <= 1 ? "eager" : "lazy"}
-            />
-          </motion.div>
-        ))}
-      </div>
+    <div className="relative aspect-[9/20] w-full overflow-hidden rounded-[2rem] bg-black">
+      {screenshots.map((src, index) => (
+        <motion.div
+          key={src}
+          className="absolute inset-0"
+          initial={false}
+          animate={{ opacity: index === current ? 1 : 0 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          aria-hidden={index !== current}
+        >
+          <Image
+            src={src}
+            alt={`Fourth Idly app screenshot ${index + 1}`}
+            fill
+            className="object-cover object-top"
+            sizes="(max-width: 768px) 260px, 300px"
+            priority={index === 0}
+            loading={index <= 1 ? "eager" : "lazy"}
+          />
+        </motion.div>
+      ))}
 
       {enablePreview && (
         <button
@@ -108,6 +109,7 @@ export function ScreenshotCarousel({
     </div>
   );
 
+  /* Phone frame: thin bezel + side buttons */
   const frame = (
     <div className={cn("relative mx-auto shrink-0", PHONE_WIDTH[variant])}>
       {variant === "phone" && (
@@ -120,25 +122,30 @@ export function ScreenshotCarousel({
 
       <motion.div
         className={cn(
-          variant === "phone" &&
-            "relative rounded-[2.5rem] border-[6px] border-foreground/90 bg-foreground p-2 shadow-elevated",
-          variant === "showcase" &&
-            "relative rounded-[2.5rem] border-[5px] border-foreground/85 bg-foreground p-2 shadow-elevated",
+          "relative rounded-[2.4rem] border-[3px] border-neutral-700 bg-black p-[5px] shadow-elevated ring-1 ring-black/30",
           floating && "will-change-transform"
         )}
-        animate={floating ? { y: [0, -10, 0] } : undefined}
+        animate={floating ? { y: [0, -8, 0] } : undefined}
         transition={
           floating
             ? { duration: 5, repeat: Infinity, ease: "easeInOut" }
             : undefined
         }
       >
-        {variant === "phone" && (
-          <div
-            className="absolute left-1/2 top-3 z-20 h-5 w-24 -translate-x-1/2 rounded-full bg-foreground"
-            aria-hidden="true"
-          />
-        )}
+        {/* Side buttons */}
+        <span
+          className="absolute -left-[6px] top-24 h-8 w-[3px] rounded-l bg-neutral-700"
+          aria-hidden="true"
+        />
+        <span
+          className="absolute -left-[6px] top-36 h-14 w-[3px] rounded-l bg-neutral-700"
+          aria-hidden="true"
+        />
+        <span
+          className="absolute -right-[6px] top-32 h-20 w-[3px] rounded-r bg-neutral-700"
+          aria-hidden="true"
+        />
+
         {screenInner}
       </motion.div>
     </div>
@@ -246,10 +253,7 @@ export function ScreenshotCarousel({
             </button>
 
             <motion.div
-              className={cn(
-                "relative w-full max-w-[300px] overflow-hidden rounded-[2.5rem] border-[5px] border-secondary/20 bg-[#f8f4f5] shadow-elevated",
-                "aspect-[9/19.5]"
-              )}
+              className="relative aspect-[9/20] w-full max-w-[300px] overflow-hidden rounded-[2.4rem] border-[3px] border-neutral-600 bg-black shadow-elevated"
               initial={{ scale: 0.96, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.96, opacity: 0 }}
@@ -257,9 +261,9 @@ export function ScreenshotCarousel({
             >
               <Image
                 src={screenshots[current]}
-                alt={`Charitey app screenshot ${current + 1} preview`}
+                alt={`Fourth Idly app screenshot ${current + 1} preview`}
                 fill
-                className="object-contain p-3"
+                className="object-cover object-top"
                 sizes="300px"
               />
             </motion.div>

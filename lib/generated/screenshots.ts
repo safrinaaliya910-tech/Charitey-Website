@@ -8,5 +8,18 @@ export const screenshotPaths = [
   "/images/screenshots/screenshot-6.jpeg",
   "/images/screenshots/screenshot-7.jpeg",
   "/images/screenshots/screenshot-8.jpeg",
-  "/images/screenshots/screenshot-9.jpeg"
+  "/images/screenshots/screenshot-9.jpeg",
+  "/images/screenshots/screenshot-10.jpeg",
+  "/images/screenshots/screenshot-11.jpeg",
+  "/images/screenshots/screenshot-12.jpeg",
+  "/images/screenshots/screenshot-13.jpeg",
+  "/images/screenshots/screenshot-14.jpeg",
+  "/images/screenshots/screenshot-15.jpeg",
+  "/images/screenshots/screenshot-16.jpeg",
+  "/images/screenshots/screenshot-17.jpeg",
+  "/images/screenshots/screenshot-18.jpeg",
+  "/images/screenshots/screenshot-19.jpeg",
+  "/images/screenshots/screenshot-20.jpeg",
+  "/images/screenshots/screenshot-21.jpeg",
+  "/images/screenshots/screenshot-22.jpeg"
 ] as const;
