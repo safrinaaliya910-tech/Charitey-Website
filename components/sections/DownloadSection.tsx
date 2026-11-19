@@ -1,31 +1,8 @@
-import { brand } from "@/config/brand";
-import { PLAY_STORE_URL } from "@/config/app";
+import { Download } from "lucide-react";
+import { APK_DOWNLOAD_URL } from "@/config/app";
 import { Button } from "@/components/ui/Button";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { FadeIn } from "@/components/ui/FadeIn";
-
-function GooglePlayBadge() {
-  return (
-    <a
-      href={PLAY_STORE_URL}
-      className="inline-flex items-center gap-3 rounded-xl border border-white/20 bg-black px-5 py-3 text-white shadow-elevated transition-transform hover:scale-[1.02]"
-      aria-label="Get Charitey on Google Play"
-    >
-      <svg viewBox="0 0 24 24" className="h-7 w-7" aria-hidden="true">
-        <path
-          fill="currentColor"
-          d="M3.6 1.8c-.3.2-.5.6-.5 1.1v18.2c0 .5.2.9.5 1.1l.1.1 10.2-10.2v-.2L3.7 1.7l-.1.1zm12.3 8.5-2.5-2.5-8.7 8.7 10.7-6.1.5-.1zm2.8-1.6-2.2-1.3-2.8 2.8 2.8 2.8 2.2-1.3c1.2-.7 1.2-2.5 0-3.2zM5.9 2.7l8.7 8.7 2.5-2.5L5.9 2.7z"
-        />
-      </svg>
-      <div className="text-left">
-        <p className="text-[10px] uppercase leading-none tracking-wide opacity-80">
-          Get it on
-        </p>
-        <p className="text-base font-semibold leading-tight">Google Play</p>
-      </div>
-    </a>
-  );
-}
 
 export function DownloadSection() {
   return (
@@ -48,18 +25,23 @@ export function DownloadSection() {
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button
-              href={PLAY_STORE_URL}
+              href={APK_DOWNLOAD_URL}
+              download="fourth-idly.apk"
               variant="secondary"
               size="lg"
-              className="min-w-[200px] bg-secondary text-primary hover:bg-white"
+              className="min-w-[220px] bg-secondary text-primary hover:bg-white"
             >
+              <Download className="h-5 w-5" />
               Download App
             </Button>
-            <GooglePlayBadge />
           </div>
 
           <p className="mt-6 text-sm text-white/60">
-            Available on Google Play Store.
+            Android only · Free · About 63 MB
+          </p>
+          <p className="mx-auto mt-2 max-w-md text-xs text-white/50">
+            After downloading, open the file and allow &ldquo;Install unknown
+            apps&rdquo; if Android asks.
           </p>
         </FadeIn>
       </div>

@@ -8,8 +8,8 @@ export const assets = {
   logo: {
     /** Full lockup — marketing / Open Graph */
     normal: "/images/logo/normal-logo.png",
-    /** Bird mark — navbar & footer (line art on light background) */
-    mark: "/images/logo/logo-white.jpeg",
+    /** Elephant mark — navbar & footer */
+    mark: "/images/logo/logo-mark.png",
     white: "/images/logo/logo-white.jpeg",
   },
   favicon: "/favicon.png",

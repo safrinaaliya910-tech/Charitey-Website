@@ -51,13 +51,13 @@ export function BrandLogo({
         )}
       >
         <Image
-          src={assets.logo.mark}
-          alt=""
-          width={config.image}
-          height={config.image}
-          className="h-[68%] w-[68%] object-contain object-center"
-          priority
-        />
+  src={assets.logo.mark}
+  alt=""
+  width={128}
+  height={128}
+  className="h-full w-full scale-[1.3] object-contain object-center"
+  priority
+/>
       </span>
 
       {showText && (

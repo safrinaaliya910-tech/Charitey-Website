@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { PLAY_STORE_URL } from "@/config/app";
+import { APK_DOWNLOAD_URL } from "@/config/app";
 import { navLinks } from "@/config/navigation";
 import { useActiveSection } from "@/lib/hooks/use-active-section";
 import { cn } from "@/lib/utils";
@@ -73,13 +73,14 @@ export function Navbar() {
           </nav>
 
           <div className="hidden shrink-0 lg:block">
-            <Button
-              href={PLAY_STORE_URL}
-              size="sm"
-              className="min-w-[8.75rem] shadow-[0_4px_16px_-4px_rgba(124,62,70,0.35)] hover:shadow-[0_8px_24px_-6px_rgba(124,62,70,0.4)]"
-            >
-              Download App
-            </Button>
+           <Button
+  href={APK_DOWNLOAD_URL}
+  download="fourth-idly.apk"
+  size="sm"
+  className="min-w-[8.75rem] shadow-[0_4px_16px_-4px_rgba(124,62,70,0.35)] hover:shadow-[0_8px_24px_-6px_rgba(124,62,70,0.4)]"
+>
+  Download App
+</Button>
           </div>
 
           <button
@@ -135,9 +136,13 @@ export function Navbar() {
                 })}
               </ul>
               <div className="mt-5 border-t border-border/80 pt-5">
-                <Button href={PLAY_STORE_URL} className="w-full">
-                  Download App
-                </Button>
+               <Button
+  href={APK_DOWNLOAD_URL}
+  download="fourth-idly.apk"
+  className="w-full"
+>
+  Download App
+</Button>
               </div>
             </nav>
           </motion.div>

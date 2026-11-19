@@ -64,8 +64,11 @@ export const Button = forwardRef<
   const classes = cn(baseStyles, variants[variant], sizes[size], className);
 
   if (href) {
-    const isExternal = href.startsWith("http") || href.startsWith("#");
-
+const isExternal =
+  href.startsWith("http") ||
+  href.startsWith("#") ||
+  href.endsWith(".apk") ||
+  "download" in props;
     if (isExternal) {
       return (
         <motion.a

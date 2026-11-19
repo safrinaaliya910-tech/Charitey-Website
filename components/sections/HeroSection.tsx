@@ -2,7 +2,7 @@
 
 import { ChevronDown, Heart, Users, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
-import { PLAY_STORE_URL } from "@/config/app";
+import { APK_DOWNLOAD_URL } from "@/config/app";
 import { Button } from "@/components/ui/Button";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { PhoneMockup } from "./PhoneMockup";
@@ -107,13 +107,14 @@ export function HeroSection() {
                 whileTap={{ scale: 0.97 }}
                 className="w-full sm:w-auto"
               >
-                <Button
-                  href={PLAY_STORE_URL}
-                  size="lg"
-                  className="w-full justify-center bg-primary font-semibold text-white shadow-lg shadow-primary/30 hover:bg-primary/90 sm:w-auto"
-                >
-                  Download App
-                </Button>
+               <Button
+  href={APK_DOWNLOAD_URL}
+  download="fourth-idly.apk"
+  size="lg"
+  className="w-full justify-center bg-primary font-semibold text-white shadow-lg shadow-primary/30 hover:bg-primary/90 sm:w-auto"
+>
+  Download App
+</Button>
               </motion.div>
               <motion.div
                 whileHover={{ y: -2 }}
