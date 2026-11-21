@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/admin",
+      "destination": "https://charitey-admin-panel.vercel.app/admin"
+    },
+    {
+      "source": "/admin/:path*",
+      "destination": "https://charitey-admin-panel.vercel.app/admin/:path*"
+    }
+  ]
+}
