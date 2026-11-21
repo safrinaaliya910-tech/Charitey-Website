@@ -1,5 +1,5 @@
 export const APK_DOWNLOAD_URL =
-  "https://github.com/safrinaaliya910-tech/Charitey-git-/releases/latest/download/fourth_idly.apk";
+  "https://github.com/safrinaaliya910-tech/Charitey-git-/releases/latest/download/fourth-idly.apk";
 
 export const PLAY_STORE_URL = "#";
 
